@@ -1,0 +1,8 @@
+{
+    "type" : "static | code",
+    "srcPath" : "/aaa/bbb/index.js",
+    "name" : "aaa.bbb",
+    "methods" :["get","put","post","delete"],
+    "enable" : true,
+    "msg" : "conflict with file:xxxxx"
+}

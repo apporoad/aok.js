@@ -27,10 +27,12 @@
   "homepage": "https://github.com/apporoad/aok.js#readme",
   "dependencies": {
     "commander": "^2.20.0",
+    "debug": "^4.1.1",
+    "find": "^0.3.0",
     "koa": "^2.7.0",
     "koa-router": "^7.4.0"
   },
-  "bin":{
-    "aok":"bin.js"
+  "bin": {
+    "aok": "bin.js"
   }
 }
