@@ -1,0 +1,36 @@
+{
+  "name": "aok.js",
+  "version": "1.0.0",
+  "description": "revert the koa",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apporoad/aok.js.git"
+  },
+  "keywords": [
+    "easy",
+    "to",
+    "depoy",
+    "your",
+    "resource",
+    "by",
+    "rest"
+  ],
+  "author": "apporoad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apporoad/aok.js/issues"
+  },
+  "homepage": "https://github.com/apporoad/aok.js#readme",
+  "dependencies": {
+    "commander": "^2.20.0",
+    "koa": "^2.7.0",
+    "koa-router": "^7.4.0"
+  },
+  "bin":{
+    "aok":"bin.js"
+  }
+}
