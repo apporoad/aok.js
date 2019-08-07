@@ -10,5 +10,8 @@ exports.abc = {
 }
 
 exports.cde = {
-    "@ccc" : ""
+    "@ccc" : "",
+    "testString" : "abc",
+    "testArray" : [1,"acb",{name : "LiSA"}],
+    "testFunction" : function(){console.log("hello good day")}
 }
