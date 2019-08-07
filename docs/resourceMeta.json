@@ -3,6 +3,7 @@
     "srcPath" : "/aaa/bbb/index.js",
     "name" : "aaa.bbb",
     "methods" :["get","put","post","delete"],
+    "value" : "Object",
     "enable" : true,
     "msg" : "conflict with file:xxxxx"
 }

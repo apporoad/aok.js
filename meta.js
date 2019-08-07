@@ -5,17 +5,59 @@ const path = require('path')
 const fs = require('fs')
 
 const test = ()=>{
-    
+    //exports.get( __dirname + "/demo")
 
+    //resolveModule(require(__dirname + '/demo/index.json'))
+
+    resolveModule(require(__dirname + '/demo/test.js')) // {abc: Object, cde: Object}
+
+    resolveModule(require(__dirname + '/demo/index.js')) // {@get: , @put: , @post: , @delete: , hello: Object}
 }
 
 const resolveModule = (m)=>{
-
+    var metas = []
+    //console.log(m)
+    if(utils.Type.isObject(m)){
+        Object.keys(m).forEach(function (key) {
+            switch(key.toLocaleLowerCase()){
+                case "@get":
+                case "@g":
+                case "@search":
+                case "@find":
+                case "@read":
+                case "@r":
+                    break;
+                case "@post":
+                case "@add":
+                case "@create":
+                case "@c":
+                    break;
+                case "@put":
+                case "@update":
+                case "@edit":
+                case "@modify":
+                case "@u":
+                    break;
+                case "@patch":
+                    debug("@patch unsupported")
+                    break;
+                case "@delete":
+                case "@remove":
+                case "@kill":
+                case "@clear":
+                case "@clean":
+                case "@rm":
+                case "@del":
+                case "@d":
+                    break
+            }
+        });
+    }
 }
 
 const getMetaFromFile = filePath =>{
     //load first
-    console.log(f)
+    console.log(filePath)
     ///home/rue/wp/aok.js/demo/easy.json
     /**
      * "type" : "static | code",
@@ -27,13 +69,13 @@ const getMetaFromFile = filePath =>{
         */
     var type = "static" 
     var methods =["get","put","post","delete"] 
-    if(utils.endWith(f,"js")){
+    if(utils.endWith(filePath,"js")){
         type = "code" 
 
     }
     return {
                 "type" : type ,
-                "srcPath" : f,
+                "srcPath" : filePath,
                 "name" : "xxx"
 
             }
@@ -52,7 +94,7 @@ const getMetaFromDir = dirPath =>{
 }
 exports.get=(srcPath)=>{
     return new Promise((r,j)=>{
-        if(fs.statSync(filePath).isFile){
+        if(fs.statSync(srcPath).isFile){
             r([getMetaFromFile(srcPath)])
         }else
             r(getMetaFromDir(srcPath))
@@ -60,7 +102,6 @@ exports.get=(srcPath)=>{
 }
 
 
-exports.get("/home/rue/wp/aok.js/demo")
 
 
 exports.test = test
