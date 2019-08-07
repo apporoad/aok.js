@@ -17,9 +17,9 @@ const test = ()=>{
 
     //console.log(getMetaFromFile(__dirname + '/demo/index.js'))
 
-    // getMetaFromDir(__dirname + '/demo').then(metas=>{
-    //     console.log(metas)
-    // })
+    getMetaFromDir(__dirname + '/demo').then(metas=>{
+        console.log(metas)
+    })
 
     //resolveModule(require(__dirname + '/demo/index.js')) // {@get: , @put: , @post: , @delete: , hello: Object}
 }
@@ -169,6 +169,46 @@ const getMetaFromFile = filePath =>{
     return metas
 }
 
+const compareMeta1gt2= (first,second)=>{
+    // code > static
+    if(first.type=="static" && second.type=="code"){
+        return false
+    }
+    // index.js > index.json
+    if(utils.indexOfString(first.srcPath,"index")>-1 
+        && utils.indexOfString(second.srcPath,"index")>-1 ){
+        return utils.indexOfString(first.srcPath,"index.js")>-1
+    }
+    // xxx  > index.xxx
+    if(utils.indexOfString(first.srcPath,"index")>-1){
+        return false
+    }
+    return true
+}
+
+const trimRepeatedMeta = metas=>{
+    var finalMetas =[]
+    var tempMap = {}
+    metas.forEach(meta => {
+        if(tempMap[meta.name]){
+            var throwMeta = meta
+            if(!compareMeta1gt2(tempMap[meta.name],meta)){
+                throwMeta = tempMap[meta.name]
+                tempMap[meta.name] = meta
+            }
+            console.info("aok:meta: resouces defined repeated , this resource is discarded : (" + meta.name+ ") from "+ throwMeta.srcPath)
+        }
+        else
+        {
+            tempMap[meta.name] = meta
+        }
+    })
+    Object.keys(tempMap).forEach(key=>{
+        finalMetas.push(tempMap[key])
+    })
+    return finalMetas
+}
+
 const getMetaFromDir = dirPath =>{
     return new Promise((r,j)=>{
         find.file(/(\.json)|(\.js)$/,dirPath,files=>{
@@ -195,7 +235,7 @@ const getMetaFromDir = dirPath =>{
                metas= metas.concat(fmetas)
             })
             // trim same resource name
-            r(metas) 
+            r(trimRepeatedMeta(metas)) 
         })
     })
     
