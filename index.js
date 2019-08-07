@@ -6,9 +6,19 @@ const utils = require('lisa.utils')
 const app = new koa()
 const router = new Router()
 
+var port = 10000
+
 var test = ()=>{
 
     //todo
+
+    exports.up([
+      { type: 'static',
+          srcPath:  __dirname+'/demo/easy.json',
+          name: 'easy',
+          methods: [ {get:"@value"},{post : "@value"},{put:"@value"},{delete:"@dvalue"} ] 
+      }
+    ])
 }
 // router.get("/",(ctx , next)=>{
 
@@ -85,22 +95,32 @@ const handleResult = (meta,method,ctx,params)=>{
 
 const registerRouter= (router,meta)=>{
     var path = getPath(meta.name)
-    meta.methods.forEach(method=>{
-        switch(method){
-            case 'get':
-                router.get(path,async (ctx)=>{
-                    //param  ctx.query
-                    handleResult(meta,method,ctx ,ctx.query)
-                })
-                break
-            
-        }
-    })
+
+    //json 
+    if(utils.endWith(meta.srcPath,'.json')){
+       meta.methods.forEach(method=>{
+
+        // todo here to do json.js first
+          if(method.get){
+              console.info(`GET : http://localhost:${port}${path}`)
+              router.get(path,async (ctx)=>{
+                  //param  ctx.query
+                  console.log(ctx.query)
+                  handleResult(meta,method,ctx ,ctx.query)
+              })
+          }
+        })
+    }
+    else{
+      //here is  code 
+    }
+ 
 }
 
 exports.up =(metas,options) =>{
     options =options || {}
     options.port = options.port || 11540
+    port = options.port
 
     metas.forEach(meta => {
         registerRouter(router,meta)
@@ -114,6 +134,7 @@ exports.up =(metas,options) =>{
 exports.mount = (resourcePath,options)=>{
     options =options || {}
     options.port = options.port || 11540
+    port = options.port
 
     metaMan.get(resourcePath).then(metas=>{
        exports.up(metas,options)

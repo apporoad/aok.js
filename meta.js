@@ -17,9 +17,9 @@ const test = ()=>{
 
     //console.log(getMetaFromFile(__dirname + '/demo/index.js'))
 
-    getMetaFromDir(__dirname + '/demo').then(metas=>{
-        console.log(metas)
-    })
+    // getMetaFromDir(__dirname + '/demo').then(metas=>{
+    //     console.log(metas)
+    // })
 
     //resolveModule(require(__dirname + '/demo/index.js')) // {@get: , @put: , @post: , @delete: , hello: Object}
 }
