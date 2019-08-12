@@ -30,7 +30,9 @@
     "debug": "^4.1.1",
     "find": "^0.3.0",
     "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
+    "lisa.sync": "^1.0.0",
     "lisa.utils": "git+https://github.com/apporoad/LiSA.utils.js.git"
   },
   "bin": {

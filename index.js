@@ -1,9 +1,12 @@
 const koa = require("koa")
 const Router = require("koa-router")
+const bodyParser = require('koa-bodyparser')
 const metaMan =require('./meta')
 const utils = require('lisa.utils')
+const LiSASync = require('lisa.sync')
 
 const app = new koa()
+app.use(bodyParser())
 const router = new Router()
 
 var port = 10000
@@ -13,34 +16,54 @@ var test = ()=>{
     //todo
 
     // exports.up([
-    //   { type: 'static',
-    //       srcPath:  __dirname+'/demo/easy.json',
-    //       name: 'easy',
-    //       methods: [ {get:"@value"},{post : "@value"},{put:"@value"},{delete:"@dvalue"} ] 
-    //   }
+      // { type: 'static',
+      //     srcPath:  __dirname+'/demo/easy.json',
+      //     name: 'easy',
+      //     methods: [ {get:"@value"},{post : "@value"},{put:"@value"},{delete:"@dvalue"} ] 
+      // }
     // ])
 
     exports.up([
-      { type: 'code',
-      name: 'hello.world',
-      methods: [{"get":"@g"},{"put":"@p"},{"post":"@update"},{"delete":"@remove"} ],
-      value: { 
-        '@g': ()=>{},
-        "@p":() =>{}
-      },
-      srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
+      { type: 'static',
+          srcPath:  __dirname+'/demo/easy.json',
+          name: 'easy',
+          methods: [ {get:"@value"},{post : "@value"},{put:"@value"},{delete:"@dvalue"} ] 
       },
       { type: 'code',
-      name: 'hello',
-      methods:[{"get":"@get"},{"put":"@put"},{"post":"@post"},{"delete":"@del"} ],
-      value: { '@get': ()=>{} },
-      srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
+        name: 'hello.world',
+        methods: [{"get":"@g"},{"put":"@p"},{"post":"@update"},{"delete":"@remove"} ],
+        value: { 
+          '@g': async (paras)=>{ return await new Promise((r,j)=>{ r({ hello : "good day"})}) },
+          "@p":(params) =>{ return params},
+          '@update':params=>{ return new Promise((r,j)=>{ setTimeout(() => {
+            params.hello = "update"
+            r(params)
+          }, 100);})},
+          '@remove':params=>{return "hello.world remove"}
+        },
+        srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
       },
       { type: 'code',
-      name: 'hello.world.why',
-      methods: [ [Object] ],
-      value: { '@get': ()=>{} },
-      srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
+        name: 'hello',
+        methods:[{"get":"@get"},{"put":"@put"},{"post":"@post"},{"delete":"@del"} ],
+        value: { 
+          '@get': p=>{ return "hello get" } ,
+          '@put':p=>{return "hello put" },
+          '@post':p=>{return "hello post" },
+          '@del':p=>{return "hello del" }
+        },
+        srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
+      },
+      { type: 'code',
+        name: 'hello.world.why',
+        methods: [ {"get":"@get"},{"put":"@put"},{"post":"@post"},{"delete":"@del"} ],
+        value: { 
+          '@get':  "hello.world.why get"  ,
+          '@put': p=>{ return "hello.world.why put" },
+          '@post': p=>{ return "hello.world.why post" },
+          '@del': p=>{ return "hello.world.why del" }
+        },
+        srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
       }
     ])
 }
@@ -103,31 +126,23 @@ const getPath = resource =>{
     return "/" + resource.replace(/\./g,'/')
 }
 
-const handleResult = (meta,method,ctx,params)=>{
-    var handler = null
-    //json
-    if(utils.endWith('.json')){
-        if(method.get){
-            handler = ()=>{
-                //todo
-                return ''}
-        }
-    }else{
-
-    }
-}
-
 const setRightResult =(ctx , data)=>{
-  if(ctx.request.accepts('xml')){
-		ctx.response.type='xml'
-	}else if(ctx.request.accepts('json')){
-		ctx.response.type='json'
-	}else if(ctx.request.accepts('html')){
-		ctx.response.type='html';
+  // if(ctx.request.accepts('xml')){
+	// 	ctx.response.type='xml'
+	// }else if(ctx.request.accepts('json')){
+	// 	ctx.response.type='json'
+	// }else if(ctx.request.accepts('html')){
+	// 	ctx.response.type='html';
+  // }else{
+  //   ctx.response.type='text';
+  // }
+  // ctx.response.body=data;
+  if(utils.Type.isObject(data)){
+    ctx.type='json'
   }else{
-    ctx.response.type='text';
+    ctx.type='text'
   }
-	ctx.response.body=data;
+  ctx.body=data
 }
 
 const registerRouter= (router,meta)=>{
@@ -135,15 +150,44 @@ const registerRouter= (router,meta)=>{
 
     //json 
     if(utils.endWith(meta.srcPath,'.json')){
+      var resouce = LiSASync(meta.srcPath)
        meta.methods.forEach(method=>{
         // todo here to do json.js first
           if(method.get){
-              console.info(`GET : http://localhost:${port}${path}`)
-              router.get(path,async (ctx)=>{
-                  //param  ctx.query
-                  console.log(ctx.query)
-                  handleResult(meta,method,ctx ,ctx.query)
+            console.info(`GET : http://localhost:${port}${path}`)
+            router.get(path,async (ctx)=>{
+              //param  ctx.query
+              //console.log(ctx.query)
+              var data =await resouce.get()
+              setRightResult(ctx,data)
+            })
+          }else if(method.put){
+            console.info(`PUT : http://localhost:${port}${path}`)
+            router.put(path,async (ctx)=>{
+              var paras = ctx.request.body
+              resouce.sync(data=>{
+                return Object.assign({}, data, paras)
               })
+              setRightResult(ctx,{success:true})
+            })
+          } else if(method.post){
+            console.info(`POST : http://localhost:${port}${path}`)
+            router.post(path,async (ctx)=>{
+              var paras = ctx.request.body
+              resouce.sync(data=>{
+                return paras || data
+              })
+              setRightResult(ctx,{success:true})
+            })
+          } else if(method.delete) {
+            console.info(`DELETE : http://localhost:${port}${path}`)
+            router.delete(path,async (ctx)=>{
+              var paras = ctx.request.body
+              resouce.sync(data=>{
+                return {}
+              })
+              setRightResult(ctx,{success:true})
+            })
           }
         })
     }
@@ -156,7 +200,8 @@ const registerRouter= (router,meta)=>{
            console.info(`GET : http://localhost:${port}${path}`)
            var fn = meta.value[method.get]
            router.get(path, async (ctx, next)=>{
-              new Promise((r,j)=>{
+             //ctx.body = "hello"
+            var data = await new Promise((r,j)=>{
                 if(utils.Type.isAsyncFunction(fn)){
                     r(fn(ctx.query))
                 } else if (utils.Type.isFunction(fn)){
@@ -165,10 +210,57 @@ const registerRouter= (router,meta)=>{
                 else{
                   r(fn)
                 }
-              }).then(data=>{
-                setRightResult(ctx,data)
               })
+              setRightResult(ctx,data)
            })
+         } else if (method.put){
+          console.info(`PUT : http://localhost:${port}${path}`)
+          var fn = meta.value[method.put]
+          router.put(path, async (ctx, next)=>{
+            var data = await new Promise((r,j)=>{
+               if(utils.Type.isAsyncFunction(fn)){
+                   r(fn(ctx.request.body))
+               } else if (utils.Type.isFunction(fn)){
+                   r(fn(ctx.request.body))
+               }
+               else{
+                 r(fn)
+               }
+             })
+             setRightResult(ctx,data)
+          })
+         }else if (method.post){
+          console.info(`POST : http://localhost:${port}${path}`)
+          var fn = meta.value[method.post]
+          router.post(path, async (ctx, next)=>{
+            var data = await new Promise((r,j)=>{
+               if(utils.Type.isAsyncFunction(fn)){
+                   r(fn(ctx.request.body))
+               } else if (utils.Type.isFunction(fn)){
+                   r(fn(ctx.request.body))
+               }
+               else{
+                 r(fn)
+               }
+             })
+             setRightResult(ctx,data)
+          })
+         }else if (method.delete){
+          console.info(`DELETE : http://localhost:${port}${path}`)
+          var fn = meta.value[method.delete]
+          router.delete(path, async (ctx, next)=>{
+            var data = await new Promise((r,j)=>{
+               if(utils.Type.isAsyncFunction(fn)){
+                   r(fn(ctx.request.body))
+               } else if (utils.Type.isFunction(fn)){
+                   r(fn(ctx.request.body))
+               }
+               else{
+                 r(fn)
+               }
+             })
+             setRightResult(ctx,data)
+          })
          }
       })
     }

@@ -1,7 +1,1 @@
-{
-    "hello" : "good day",
-    "version" : "v100000",
-    "father" :{
-        "LiSA" : "Love is Same All"
-    }
-}
+{"hello":"good day","version":"v100000","father":{"LiSA":"Love is Same All","ll":"hello"}}
