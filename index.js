@@ -12,11 +12,35 @@ var test = ()=>{
 
     //todo
 
+    // exports.up([
+    //   { type: 'static',
+    //       srcPath:  __dirname+'/demo/easy.json',
+    //       name: 'easy',
+    //       methods: [ {get:"@value"},{post : "@value"},{put:"@value"},{delete:"@dvalue"} ] 
+    //   }
+    // ])
+
     exports.up([
-      { type: 'static',
-          srcPath:  __dirname+'/demo/easy.json',
-          name: 'easy',
-          methods: [ {get:"@value"},{post : "@value"},{put:"@value"},{delete:"@dvalue"} ] 
+      { type: 'code',
+      name: 'hello.world',
+      methods: [{"get":"@g"},{"put":"@p"},{"post":"@update"},{"delete":"@remove"} ],
+      value: { 
+        '@g': ()=>{},
+        "@p":() =>{}
+      },
+      srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
+      },
+      { type: 'code',
+      name: 'hello',
+      methods:[{"get":"@get"},{"put":"@put"},{"post":"@post"},{"delete":"@del"} ],
+      value: { '@get': ()=>{} },
+      srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
+      },
+      { type: 'code',
+      name: 'hello.world.why',
+      methods: [ [Object] ],
+      value: { '@get': ()=>{} },
+      srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
       }
     ])
 }
@@ -93,13 +117,25 @@ const handleResult = (meta,method,ctx,params)=>{
     }
 }
 
+const setRightResult =(ctx , data)=>{
+  if(ctx.request.accepts('xml')){
+		ctx.response.type='xml'
+	}else if(ctx.request.accepts('json')){
+		ctx.response.type='json'
+	}else if(ctx.request.accepts('html')){
+		ctx.response.type='html';
+  }else{
+    ctx.response.type='text';
+  }
+	ctx.response.body=data;
+}
+
 const registerRouter= (router,meta)=>{
     var path = getPath(meta.name)
 
     //json 
     if(utils.endWith(meta.srcPath,'.json')){
        meta.methods.forEach(method=>{
-
         // todo here to do json.js first
           if(method.get){
               console.info(`GET : http://localhost:${port}${path}`)
@@ -113,8 +149,29 @@ const registerRouter= (router,meta)=>{
     }
     else{
       //here is  code 
+      //{"get":"@get"},{"put","@put"},{"post":"@post"},{"delete":"@del"}
+      meta.methods.forEach(method=>{
+         //todo get
+         if(method.get){
+           console.info(`GET : http://localhost:${port}${path}`)
+           var fn = meta.value[method.get]
+           router.get(path, async (ctx, next)=>{
+              new Promise((r,j)=>{
+                if(utils.Type.isAsyncFunction(fn)){
+                    r(fn(ctx.query))
+                } else if (utils.Type.isFunction(fn)){
+                    r(fn(ctx.query))
+                }
+                else{
+                  r(fn)
+                }
+              }).then(data=>{
+                setRightResult(ctx,data)
+              })
+           })
+         }
+      })
     }
- 
 }
 
 exports.up =(metas,options) =>{
