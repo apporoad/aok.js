@@ -4,6 +4,7 @@ const bodyParser = require('koa-bodyparser')
 const metaMan =require('./meta')
 const utils = require('lisa.utils')
 const LiSASync = require('lisa.sync')
+const static = require('koa-static')
 
 const app = new koa()
 app.use(bodyParser())
@@ -276,18 +277,29 @@ exports.up =(metas,options) =>{
     });
     app.use(router.routes())
         .use(router.allowedMethods())
+
+    // //static first
+    // app.use(static(__dirname ))
+
     app.listen(options.port)
     console.info(`web started : http://localhost:${options.port}/`)
 }
 
-exports.mount = (resourcePath,options)=>{
+exports.mount = (resourcePath,staticPath,options)=>{
     options =options || {}
     options.port = options.port || 11540
     port = options.port
 
     metaMan.get(resourcePath).then(metas=>{
        exports.up(metas,options)
+
+       if(staticPath)
+       {
+        console.log('mount static dir: ' + staticPath)
+        app.use(static(staticPath))
+       }
     })
+
 } 
 
 exports.test = test

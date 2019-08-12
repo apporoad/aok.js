@@ -242,7 +242,7 @@ const getMetaFromDir = dirPath =>{
 }
 exports.get=(srcPath)=>{
     return new Promise((r,j)=>{
-        if(fs.statSync(srcPath).isFile){
+        if(fs.statSync(srcPath).isFile()){
             r([getMetaFromFile(srcPath)])
         }else
             r(getMetaFromDir(srcPath))
