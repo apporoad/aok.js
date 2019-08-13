@@ -100,7 +100,7 @@ const resolveModule = (m)=>{
                     else{
                         var childMetas = resolveModule(m[key])
                         childMetas.forEach(cm =>{
-                            cm.name = cm.name + (key && cm.name ? '.' : "" ) + key
+                            cm.name = key + (key && cm.name ? '.' : "" ) + cm.name 
                         })
                         metas = metas.concat(childMetas)
                     }
@@ -243,7 +243,7 @@ const getMetaFromDir = dirPath =>{
 exports.get=(srcPath)=>{
     return new Promise((r,j)=>{
         if(fs.statSync(srcPath).isFile()){
-            r([getMetaFromFile(srcPath)])
+            r(getMetaFromFile(srcPath))
         }else
             r(getMetaFromDir(srcPath))
     })

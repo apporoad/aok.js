@@ -225,7 +225,8 @@ const registerRouter= (router,meta)=>{
          if(method.get){
           addHelp(port,path,'GET')
           console.info(`GET : http://localhost:${port}${path}`)
-          var fn = meta.value[method.get]
+          
+          var fn = method.get != '@value' ? meta.value[method.get] :meta.value
           router.get(path, async (ctx, next)=>{
             //ctx.body = "hello"
           var data = await new Promise((r,j)=>{
