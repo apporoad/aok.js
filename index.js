@@ -43,49 +43,51 @@ var test = ()=>{
       // }
     // ])
 
-    exports.up([
-      { type: 'static',
-          srcPath:  __dirname+'/demo/easy.json',
-          name: 'easy',
-          methods: [ {get:"@value"},{post : "@value"},{put:"@value"},{delete:"@dvalue"} ] 
-      },
-      { type: 'code',
-        name: 'hello.world',
-        methods: [{"get":"@g"},{"put":"@p"},{"post":"@update"},{"delete":"@remove"} ],
-        value: { 
-          '@g': async (paras)=>{ return await new Promise((r,j)=>{ r({ hello : "good day"})}) },
-          "@p":(params) =>{ return params},
-          '@update':params=>{ return new Promise((r,j)=>{ setTimeout(() => {
-            params.hello = "update"
-            r(params)
-          }, 100);})},
-          '@remove':params=>{return "hello.world remove"}
-        },
-        srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
-      },
-      { type: 'code',
-        name: 'hello',
-        methods:[{"get":"@get"},{"put":"@put"},{"post":"@post"},{"delete":"@del"} ],
-        value: { 
-          '@get': p=>{ return "hello get" } ,
-          '@put':p=>{return "hello put" },
-          '@post':p=>{return "hello post" },
-          '@del':p=>{return "hello del" }
-        },
-        srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
-      },
-      { type: 'code',
-        name: 'hello.world.why',
-        methods: [ {"get":"@get"},{"put":"@put"},{"post":"@post"},{"delete":"@del"} ],
-        value: { 
-          '@get':  "hello.world.why get"  ,
-          '@put': p=>{ return "hello.world.why put" },
-          '@post': p=>{ return "hello.world.why post" },
-          '@del': p=>{ return "hello.world.why del" }
-        },
-        srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
-      }
-    ])
+    exports.mount(__dirname+'/demo/test.js')
+
+    // exports.up([
+    //   { type: 'static',
+    //       srcPath:  __dirname+'/demo/easy.json',
+    //       name: 'easy',
+    //       methods: [ {get:"@value"},{post : "@value"},{put:"@value"},{delete:"@dvalue"} ] 
+    //   },
+    //   { type: 'code',
+    //     name: 'hello.world',
+    //     methods: [{"get":"@g"},{"put":"@p"},{"post":"@update"},{"delete":"@remove"} ],
+    //     value: { 
+    //       '@g': async (paras)=>{ return await new Promise((r,j)=>{ r({ hello : "good day"})}) },
+    //       "@p":(params) =>{ return params},
+    //       '@update':params=>{ return new Promise((r,j)=>{ setTimeout(() => {
+    //         params.hello = "update"
+    //         r(params)
+    //       }, 100);})},
+    //       '@remove':params=>{return "hello.world remove"}
+    //     },
+    //     srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
+    //   },
+    //   { type: 'code',
+    //     name: 'hello',
+    //     methods:[{"get":"@get"},{"put":"@put"},{"post":"@post"},{"delete":"@del"} ],
+    //     value: { 
+    //       '@get': p=>{ return "hello get" } ,
+    //       '@put':p=>{return "hello put" },
+    //       '@post':p=>{return "hello post" },
+    //       '@del':p=>{return "hello del" }
+    //     },
+    //     srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
+    //   },
+    //   { type: 'code',
+    //     name: 'hello.world.why',
+    //     methods: [ {"get":"@get"},{"put":"@put"},{"post":"@post"},{"delete":"@del"} ],
+    //     value: { 
+    //       '@get':  "hello.world.why get"  ,
+    //       '@put': p=>{ return "hello.world.why put" },
+    //       '@post': p=>{ return "hello.world.why post" },
+    //       '@del': p=>{ return "hello.world.why del" }
+    //     },
+    //     srcPath: 'F:\\workspace\\aok.js\\demo\\hello.js' 
+    //   }
+    // ])
 }
 // router.get("/",(ctx , next)=>{
 
