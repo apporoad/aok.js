@@ -10,8 +10,27 @@ const app = new koa()
 app.use(bodyParser())
 const router = new Router()
 
+var help = ""
+
 var port = 10000
 
+var help = ""
+
+var addHelp = (port,path,method)=>{
+  //todo
+  switch(method){
+    case 'GET':
+      help += `http://localhost:${port}${path}`
+      break
+    case 'PUT':
+      break
+    case 'POST':
+      break
+    case 'DELETE':
+      break
+  }
+  
+}
 var test = ()=>{
 
     //todo
@@ -155,6 +174,7 @@ const registerRouter= (router,meta)=>{
        meta.methods.forEach(method=>{
         // todo here to do json.js first
           if(method.get){
+            addHelp(port,path,'GET')
             console.info(`GET : http://localhost:${port}${path}`)
             router.get(path,async (ctx)=>{
               //param  ctx.query
@@ -163,6 +183,7 @@ const registerRouter= (router,meta)=>{
               setRightResult(ctx,data)
             })
           }else if(method.put){
+            addHelp(port,path,'PUT')
             console.info(`PUT : http://localhost:${port}${path}`)
             router.put(path,async (ctx)=>{
               var paras = ctx.request.body
@@ -172,6 +193,7 @@ const registerRouter= (router,meta)=>{
               setRightResult(ctx,{success:true})
             })
           } else if(method.post){
+            addHelp(port,path,'POST')
             console.info(`POST : http://localhost:${port}${path}`)
             router.post(path,async (ctx)=>{
               var paras = ctx.request.body
@@ -181,6 +203,7 @@ const registerRouter= (router,meta)=>{
               setRightResult(ctx,{success:true})
             })
           } else if(method.delete) {
+            addHelp(port,path,'DELETE')
             console.info(`DELETE : http://localhost:${port}${path}`)
             router.delete(path,async (ctx)=>{
               var paras = ctx.request.body
@@ -198,23 +221,25 @@ const registerRouter= (router,meta)=>{
       meta.methods.forEach(method=>{
          //todo get
          if(method.get){
-           console.info(`GET : http://localhost:${port}${path}`)
-           var fn = meta.value[method.get]
-           router.get(path, async (ctx, next)=>{
-             //ctx.body = "hello"
-            var data = await new Promise((r,j)=>{
-                if(utils.Type.isAsyncFunction(fn)){
-                    r(fn(ctx.query))
-                } else if (utils.Type.isFunction(fn)){
-                    r(fn(ctx.query))
-                }
-                else{
-                  r(fn)
-                }
-              })
-              setRightResult(ctx,data)
+          addHelp(port,path,'GET')
+          console.info(`GET : http://localhost:${port}${path}`)
+          var fn = meta.value[method.get]
+          router.get(path, async (ctx, next)=>{
+            //ctx.body = "hello"
+          var data = await new Promise((r,j)=>{
+              if(utils.Type.isAsyncFunction(fn)){
+                  r(fn(ctx.query))
+              } else if (utils.Type.isFunction(fn)){
+                  r(fn(ctx.query))
+              }
+              else{
+                r(fn)
+              }
+            })
+            setRightResult(ctx,data)
            })
          } else if (method.put){
+          addHelp(port,path,'PUT')
           console.info(`PUT : http://localhost:${port}${path}`)
           var fn = meta.value[method.put]
           router.put(path, async (ctx, next)=>{
@@ -231,6 +256,7 @@ const registerRouter= (router,meta)=>{
              setRightResult(ctx,data)
           })
          }else if (method.post){
+          addHelp(port,path,'POST')
           console.info(`POST : http://localhost:${port}${path}`)
           var fn = meta.value[method.post]
           router.post(path, async (ctx, next)=>{
@@ -247,6 +273,7 @@ const registerRouter= (router,meta)=>{
              setRightResult(ctx,data)
           })
          }else if (method.delete){
+          addHelp(port,path,'DELETE')
           console.info(`DELETE : http://localhost:${port}${path}`)
           var fn = meta.value[method.delete]
           router.delete(path, async (ctx, next)=>{
