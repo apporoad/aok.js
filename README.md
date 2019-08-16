@@ -37,3 +37,11 @@ DEBUG=* aok xxx xxx
 #windows powershell
 $env:DEBUG = "*,-not_this"
 ```
+## how to deploy
+```bash
+npm i -g pm2
+npm i -g aok.js
+
+pm2 start --name yourApp aok -- . -p 11540
+
+```
