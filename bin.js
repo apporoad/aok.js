@@ -8,6 +8,7 @@ program.version(require('./package.json').version)
     .usage(' [path]')
     .option('-p --port [value]', '端口号，默认是11540')
     .option('-s --staticPath [value]', '静态路径' )
+    .option('-l --list',"不启动，只查看可用资源")
     .option('--no-cors','关闭跨域')
     .parse(process.argv)
 
@@ -25,7 +26,10 @@ if(fs.existsSync(rPath)){
     if(static){
         static = path.resolve(process.cwd(),static)
     }
-    aok.mount(rPath,program.staticPath,options)
+    if(program.list){
+        aok.list(rPath,program.staticPath,options)
+    }else
+        aok.mount(rPath,program.staticPath,options)
 }else{
     console.log('path not exsits')
 }

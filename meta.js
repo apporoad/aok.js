@@ -213,7 +213,7 @@ const getMetaFromDir = dirPath =>{
     return new Promise((r,j)=>{
         find.file(/(\.json)|(\.js)$/,dirPath,files=>{
             var metas =[]
-            console.log(dirPath)
+            //console.log(dirPath)
             files.forEach(f=>{
                 // .   son   dir1/dir2
                var rBasePath = utils.endTrim(utils.startTrim(utils.startTrim(f.replace(/[\\]/g,"/"),dirPath.replace(/[\\]/g,"/")) , "/"),[".json",".js"])

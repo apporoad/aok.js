@@ -312,15 +312,14 @@ exports.up =(metas,options) =>{
     metas.forEach(meta => {
         registerRouter(router,meta)
     });
-    app.use(router.routes())
-        .use(router.allowedMethods())
 
-
-    // //static first
-    // app.use(static(__dirname ))
-
-    app.listen(options.port)
-    console.info(`web started : http://localhost:${options.port}/`)
+    if(!options.list){
+      app.use(router.routes())
+      .use(router.allowedMethods())
+      app.listen(options.port)
+      console.info(`web started : http://localhost:${options.port}/`)
+    }
+    
 }
 
 exports.mount = (resourcePath,staticPath,options)=>{
@@ -332,13 +331,21 @@ exports.mount = (resourcePath,staticPath,options)=>{
     metaMan.get(resourcePath).then(metas=>{
        exports.up(metas,options)
 
-       if(staticPath)
-       {
-        console.log('mount static dir: ' + staticPath)
-        app.use(static(staticPath))
+       if(!options.list){
+        if(staticPath)
+        {
+         console.log('mount static dir: ' + staticPath)
+         app.use(static(staticPath))
+        }
        }
     })
 
 } 
+
+exports.list = (resourcePath,staticPath,options)=>{
+  options = options|| {}
+  options.list =true
+  exports.mount(resourcePath,staticPath,options)
+}
 
 exports.test = test
