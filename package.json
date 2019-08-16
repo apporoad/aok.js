@@ -1,6 +1,6 @@
 {
   "name": "aok.js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "revert the koa",
   "main": "index.js",
   "scripts": {
@@ -33,6 +33,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
+    "koa2-cors": "^2.0.6",
     "lisa.sync": "^1.0.0",
     "lisa.utils": "git+https://github.com/apporoad/LiSA.utils.js.git"
   },

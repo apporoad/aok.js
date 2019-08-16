@@ -8,6 +8,7 @@ program.version(require('./package.json').version)
     .usage(' [path]')
     .option('-p --port [value]', '端口号，默认是11540')
     .option('-s --staticPath [value]', '静态路径' )
+    .option('--no-cors','关闭跨域')
     .parse(process.argv)
 
 var rPath = '.'
@@ -19,6 +20,7 @@ var rPath = path.resolve(process.cwd(),rPath)
 if(fs.existsSync(rPath)){
     var options = {}
     options.port = program.port || 11540
+    options.nocors = !program.cors
     var static = program.staticPath
     if(static){
         static = path.resolve(process.cwd(),static)

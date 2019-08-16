@@ -5,6 +5,7 @@ const metaMan =require('./meta')
 const utils = require('lisa.utils')
 const LiSASync = require('lisa.sync')
 const static = require('koa-static')
+const cors = require('koa2-cors')
 
 const app = new koa()
 app.use(bodyParser())
@@ -300,13 +301,20 @@ const registerRouter= (router,meta)=>{
 exports.up =(metas,options) =>{
     options =options || {}
     options.port = options.port || 11540
+    options.nocors = options.nocors || false
     port = options.port
+
+    //cors
+    if(!options.nocors){
+      app.use(cors({}))
+    }
 
     metas.forEach(meta => {
         registerRouter(router,meta)
     });
     app.use(router.routes())
         .use(router.allowedMethods())
+
 
     // //static first
     // app.use(static(__dirname ))
@@ -318,6 +326,7 @@ exports.up =(metas,options) =>{
 exports.mount = (resourcePath,staticPath,options)=>{
     options =options || {}
     options.port = options.port || 11540
+    options.nocors = options.nocors || false
     port = options.port
 
     metaMan.get(resourcePath).then(metas=>{
