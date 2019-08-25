@@ -45,3 +45,14 @@ npm i -g aok.js
 pm2 start --name yourApp aok -- . -p 11540
 
 ```
+
+
+## ps
+```
+we use '_any_' as '*' with your fileName
+
+you can : 
+_any_.js => /*
+abc/_any_.js => /abc/*
+
+```

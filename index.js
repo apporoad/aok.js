@@ -146,7 +146,7 @@ var test = ()=>{
 */
 
 const getPath = resource =>{
-    return "/" + resource.replace(/\./g,'/')
+    return "/" + resource.replace(/\./g,'/').replace(/_any_/g,'*')
 }
 
 const setRightResult =(ctx , data)=>{
@@ -163,7 +163,12 @@ const setRightResult =(ctx , data)=>{
   if(utils.Type.isObject(data)){
     ctx.type='json'
   }else{
-    ctx.type='text'
+    if(utils.startWith(data,'<!DOCTYPE html>')){
+      ctx.type='text/html'
+    }
+    else{
+      ctx.type='text'
+    }
   }
   ctx.body=data
 }
@@ -232,9 +237,9 @@ const registerRouter= (router,meta)=>{
             //ctx.body = "hello"
           var data = await new Promise((r,j)=>{
               if(utils.Type.isAsyncFunction(fn)){
-                  r(fn(ctx.query))
+                  r(fn(ctx.query,ctx))
               } else if (utils.Type.isFunction(fn)){
-                  r(fn(ctx.query))
+                  r(fn(ctx.query,ctx))
               }
               else{
                 r(fn)
@@ -249,9 +254,9 @@ const registerRouter= (router,meta)=>{
           router.put(path, async (ctx, next)=>{
             var data = await new Promise((r,j)=>{
                if(utils.Type.isAsyncFunction(fn)){
-                   r(fn(ctx.request.body))
+                   r(fn(ctx.request.body,ctx))
                } else if (utils.Type.isFunction(fn)){
-                   r(fn(ctx.request.body))
+                   r(fn(ctx.request.body,ctx))
                }
                else{
                  r(fn)
@@ -266,9 +271,9 @@ const registerRouter= (router,meta)=>{
           router.post(path, async (ctx, next)=>{
             var data = await new Promise((r,j)=>{
                if(utils.Type.isAsyncFunction(fn)){
-                   r(fn(ctx.request.body))
+                   r(fn(ctx.request.body,ctx))
                } else if (utils.Type.isFunction(fn)){
-                   r(fn(ctx.request.body))
+                   r(fn(ctx.request.body,ctx))
                }
                else{
                  r(fn)
@@ -283,9 +288,9 @@ const registerRouter= (router,meta)=>{
           router.delete(path, async (ctx, next)=>{
             var data = await new Promise((r,j)=>{
                if(utils.Type.isAsyncFunction(fn)){
-                   r(fn(ctx.request.body))
+                   r(fn(ctx.request.body,ctx))
                } else if (utils.Type.isFunction(fn)){
-                   r(fn(ctx.request.body))
+                   r(fn(ctx.request.body,ctx))
                }
                else{
                  r(fn)
@@ -326,18 +331,30 @@ exports.mount = (resourcePath,staticPath,options)=>{
     options =options || {}
     options.port = options.port || 11540
     options.nocors = options.nocors || false
+    options.nostaticGoFirst = options.nostaticGoFirst || false
     port = options.port
 
     metaMan.get(resourcePath).then(metas=>{
-       exports.up(metas,options)
-
-       if(!options.list){
-        if(staticPath)
-        {
-         console.log('mount static dir: ' + staticPath)
-         app.use(static(staticPath))
-        }
-       }
+      if(!options.nostaticGoFirst){
+        if(!options.list){
+          if(staticPath)
+          {
+           console.log('mount static dir: ' + staticPath)
+           app.use(static(staticPath))
+          }
+         }
+      }
+      exports.up(metas,options)
+      if(options.nostaticGoFirst){
+        if(!options.list){
+          if(staticPath)
+          {
+           console.log('mount static dir: ' + staticPath)
+           app.use(static(staticPath))
+          }
+         }
+      }
+       
     })
 
 } 
