@@ -7,6 +7,7 @@ const LiSASync = require('lisa.sync')
 const static = require('koa-static')
 const cors = require('koa2-cors')
 const deepassign= require('deepassign')
+const LiSAJson = require('lisa.json')
 
 const app = new koa()
 app.use(bodyParser())
@@ -184,20 +185,24 @@ const registerRouter= (router,meta)=>{
         // todo here to do json.js first
           if(method.get){
             addHelp(port,path,'GET')
-            console.info(`GET : http://localhost:${port}${path}`)
+            console.info(`GET : http://localhost:${port}${path}?node=`)
             router.get(path,async (ctx)=>{
               //param  ctx.query
               //console.log(ctx.query)
               var data =await resouce.get()
+              if(ctx.query.node){
+                data = LiSAJson(data).get(ctx.query.node)
+              }
               setRightResult(ctx,data)
             })
           }else if(method.put){
             addHelp(port,path,'PUT')
-            console.info(`PUT : http://localhost:${port}${path}`)
+            console.info(`PUT : http://localhost:${port}${path}?node=`)
             router.put(path,async (ctx)=>{
               var paras = ctx.request.body
               resouce.sync(data=>{
-                return deepassign({},data,paras)
+                LiSAJson(data).set(ctx.query.node || "",paras)
+                return data
               })
               setRightResult(ctx,{success:true})
             })
@@ -213,11 +218,17 @@ const registerRouter= (router,meta)=>{
             })
           } else if(method.delete) {
             addHelp(port,path,'DELETE')
-            console.info(`DELETE : http://localhost:${port}${path}`)
+            console.info(`DELETE : http://localhost:${port}${path}?node=`)
             router.delete(path,async (ctx)=>{
               var paras = ctx.request.body
               resouce.sync(data=>{
-                return {}
+                if(ctx.query.node){
+                  LiSAJson(data).set(ctx.query.node, null)
+                  return data
+                }
+                else{
+                  return {}
+                }
               })
               setRightResult(ctx,{success:true})
             })

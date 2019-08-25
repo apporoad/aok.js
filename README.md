@@ -56,3 +56,16 @@ _any_.js => /*
 abc/_any_.js => /abc/*
 
 ```
+
+```
+// .json support  json node operations
+
+you can :
+
+GET http://localhost:11540/?node=abc.hello
+PUT http://localhost:11540/?node=abc.hello
+DELETE http://localhost:11540/?node=abc.hello
+
+just try it
+
+```
