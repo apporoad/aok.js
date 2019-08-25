@@ -6,6 +6,7 @@ const utils = require('lisa.utils')
 const LiSASync = require('lisa.sync')
 const static = require('koa-static')
 const cors = require('koa2-cors')
+const deepassign= require('deepassign')
 
 const app = new koa()
 app.use(bodyParser())
@@ -44,7 +45,7 @@ var test = ()=>{
       // }
     // ])
 
-    exports.mount(__dirname+'/demo/test.js')
+    exports.mount(__dirname+'/demo/test.json')
 
     // exports.up([
     //   { type: 'static',
@@ -196,7 +197,7 @@ const registerRouter= (router,meta)=>{
             router.put(path,async (ctx)=>{
               var paras = ctx.request.body
               resouce.sync(data=>{
-                return Object.assign({}, data, paras)
+                return deepassign({},data,paras)
               })
               setRightResult(ctx,{success:true})
             })
