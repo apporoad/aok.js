@@ -201,7 +201,12 @@ const registerRouter= (router,meta)=>{
             router.put(path,async (ctx)=>{
               var paras = ctx.request.body
               resouce.sync(data=>{
-                LiSAJson(data).set(ctx.query.node || "",paras)
+                if(ctx.query.node){
+                  LiSAJson(data).set(ctx.query.node,paras)
+                }
+                else{
+                  return Object.assign({},data,paras)
+                }
                 return data
               })
               setRightResult(ctx,{success:true})
