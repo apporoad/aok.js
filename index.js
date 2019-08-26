@@ -17,6 +17,7 @@ var help = ""
 
 var port = 10000
 
+
 var help = ""
 
 var addHelp = (port,path,method)=>{
@@ -344,14 +345,40 @@ exports.up =(metas,options) =>{
     
 }
 
+
 exports.mount = (resourcePath,staticPath,options)=>{
     options =options || {}
     options.port = options.port || 11540
     options.nocors = options.nocors || false
     options.nostaticGoFirst = options.nostaticGoFirst || false
+    options.metas =  options.metas || []
     port = options.port
 
     metaMan.get(resourcePath).then(metas=>{
+      metas = metas.concat(options.metas)
+      //order 
+      metas.sort((a,b)=>{
+        /*{ type: 'code',
+    name: 'api._any_',
+    methods: [ [Object] ],
+    value: { '@get': [AsyncFunction: @get] },
+    srcPath: 'F:\\workspace\\pnote\\api\\_any_.js' }*/
+        a = a.name
+        b = b.name
+        var aIndex = a.indexOf('_any_')
+        var bIndex = b.indexOf('_any_')
+         if( aIndex> -1 && bIndex> -1){
+           return aIndex < bIndex
+         }else if(aIndex> -1){
+           return true
+         }else if(bIndex >-1){
+           return false
+         }else{
+           return a<b
+         }
+      })
+
+      console.log(metas)
       if(!options.nostaticGoFirst){
         if(!options.list){
           if(staticPath)
