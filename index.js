@@ -345,6 +345,11 @@ exports.up =(metas,options) =>{
     
 }
 
+exports.getMetas=(resourcePath)=>{
+  return new Promise((r,j)=>{
+    r(metaMan.get(resourcePath))
+  })
+}
 
 exports.mount = (resourcePath,staticPath,options)=>{
     options =options || {}
@@ -378,7 +383,7 @@ exports.mount = (resourcePath,staticPath,options)=>{
          }
       })
 
-      console.log(metas)
+      //console.log(metas)
       if(!options.nostaticGoFirst){
         if(!options.list){
           if(staticPath)
