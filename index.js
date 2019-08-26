@@ -375,9 +375,9 @@ exports.mount = (resourcePath,staticPath,options)=>{
          if( aIndex> -1 && bIndex> -1){
            return aIndex < bIndex
          }else if(aIndex> -1){
-           return true
+           return 1
          }else if(bIndex >-1){
-           return false
+           return -1
          }else{
            return a<b
          }
