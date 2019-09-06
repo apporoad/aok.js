@@ -1,6 +1,28 @@
 # aok.js
 reverse the koa
 
+## just step by step to understand aok
+
+```bash
+npm i -g aok.js
+
+mkdir temp
+cd temp
+
+cat << EOF > data.json
+{
+    "hello":"good good day"
+}
+EOF
+
+aok . 
+
+# try  visit by http
+#GET : http://localhost:11540/data?node=hello
+#POST : http://localhost:11540/data
+#PUT : http://localhost:11540/data?node=
+#DELETE : http://localhost:11540/data?node=
+
 ## what is aok
 
 <div align=center><img src="https://raw.githubusercontent.com/apporoad/aok.js/master/docs/aok.js.png"/></div>  
