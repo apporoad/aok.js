@@ -1,5 +1,5 @@
 # aok.js
-reverse the koa
+reverse the koa , ROP resource oriented program
 
 ## just step by step to understand aok
 
@@ -22,6 +22,7 @@ aok .
 #POST : http://localhost:11540/data
 #PUT : http://localhost:11540/data?node=
 #DELETE : http://localhost:11540/data?node=
+```
 
 ## what is aok
 
