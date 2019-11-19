@@ -39,7 +39,7 @@
     "lisa.dl": "^1.0.1",
     "lisa.json": "^1.0.0",
     "lisa.sync": "^1.0.0",
-    "lisa.utils": "git+https://github.com/apporoad/LiSA.utils.js.git",
+    "lisa.utils": "^1.0.0",
     "rimraf": "^3.0.0"
   },
   "bin": {

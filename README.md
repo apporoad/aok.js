@@ -135,6 +135,8 @@ docker build -t apporoad/aok:1 .
 
 docker run -d --name aok -p 1154:1154 apporoad/aok:1 
 
+docker run -d --name aok2 -e aok_type=git -e aok_path="https://github.com/apporoad/pnote.git" -e aok_param="-r api -s static" -p 1154:1154 apporoad/aok:2 
+
 #visit  http://localhost:1154
 #visit  http://localhost:1154/data
 ```
