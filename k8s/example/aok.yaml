@@ -15,7 +15,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pnote-deploy
+  name: aok-deploy
 spec:
   replicas: 1
   selector:
@@ -29,7 +29,7 @@ spec:
         release: "1"
     spec:
       containers:
-      - name: pnote
+      - name: aok
         image: apporoad/aok:1
         ports:
         - name: aok
