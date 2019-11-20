@@ -92,3 +92,32 @@ DELETE http://localhost:11540/?node=abc.hello
 just try it
 
 ```
+
+
+## docker run 
+
+```bash
+
+#  first add /api and /static
+docker run -d --name aok -p 1154:1154 -v /api:/api -v /static:/static apporoad/aok:1
+
+```
+
+
+
+## dockerfile
+```bash
+
+git clone https://github.com/apporoad/aok.js.git
+
+cd aok.js
+
+npm i
+
+docker build -t apporoad/aok:1 .
+
+docker run -d --name aok -p 1154:1154 apporoad/aok:1 
+
+#visit  http://localhost:1154
+#visit  http://localhost:1154/data
+```
