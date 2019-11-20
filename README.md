@@ -121,3 +121,13 @@ docker run -d --name aok -p 1154:1154 apporoad/aok:1
 #visit  http://localhost:1154
 #visit  http://localhost:1154/data
 ```
+
+## k8s
+
+easy use here:
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/apporoad/aok.js/master/k8s/example/aok.yaml
+kubectl apply -f https://raw.githubusercontent.com/apporoad/aok.js/master/k8s/example/ingress-aok.yaml
+
+```
