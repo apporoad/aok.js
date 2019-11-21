@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "aok.fullname" . }}-test-connection"
+  labels:
+{{ include "aok.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "aok.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
