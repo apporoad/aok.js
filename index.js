@@ -340,6 +340,9 @@ exports.up =(metas,options) =>{
       app.use(router.routes())
       .use(router.allowedMethods())
       app.listen(options.port)
+      app.on('close', err => {
+        console.error('server errosdddddddddddddddddr', err)
+      });
       console.info(`web started : http://localhost:${options.port}/`)
     }
     
