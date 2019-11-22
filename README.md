@@ -131,3 +131,8 @@ kubectl apply -f https://raw.githubusercontent.com/apporoad/aok.js/master/k8s/ex
 kubectl apply -f https://raw.githubusercontent.com/apporoad/aok.js/master/k8s/example/ingress-aok.yaml
 
 ```
+
+## howToMakeHelmChart
+
+[here](./howToMakeHelmChart.md)
+

@@ -33,6 +33,11 @@ spec:
             - name: http
               containerPort: 1154
               protocol: TCP
+          volumeMounts:
+{{- if .Values.persistence.enabled }}
+          - mountPath: /storage
+            name: storage-volume
+{{- end }}
           livenessProbe:
             httpGet:
               path: /
@@ -55,3 +60,12 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
+      volumes:
+      - name: storage-volume
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim | default (include "aok.fullname" .) }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}
+  
