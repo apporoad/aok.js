@@ -1,6 +1,6 @@
 {
   "name": "aok.js",
-  "version": "1.2.4",
+  "version": "2.0.0",
   "description": "revert the koa",
   "main": "index.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "debug": "^4.1.1",
     "deepassign": "^1.0.2",
     "find": "^0.3.0",
+    "gitignore-parser": "0.0.2",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",

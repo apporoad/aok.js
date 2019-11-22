@@ -359,7 +359,7 @@ exports.mount = (resourcePath,staticPath,options)=>{
     options.metas =  options.metas || []
     port = options.port
 
-    metaMan.get(resourcePath).then(metas=>{
+    metaMan.get(resourcePath,options.ignore).then(metas=>{
       metas = metas.concat(options.metas)
       //order 
       metas.sort((a,b)=>{

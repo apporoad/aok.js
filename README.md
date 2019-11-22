@@ -1,6 +1,13 @@
 # aok.js
 reverse the koa , ROP resource oriented program
 
+## about version 
+
+v2.0.0 
+1. add .aokignore just like .gitignore
+2. add clis for aok like:
+
+
 ## just step by step to understand aok
 
 ```bash

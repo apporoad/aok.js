@@ -3,6 +3,7 @@ const find = require('find')
 const utils = require('lisa.utils')
 const path = require('path')
 const fs = require('fs')
+const gparser = require('gitignore-parser')
 
 const test = ()=>{
     //exports.get( __dirname + "/demo")
@@ -17,9 +18,12 @@ const test = ()=>{
 
     //console.log(getMetaFromFile(__dirname + '/demo/index.js'))
 
-    // getMetaFromDir(__dirname + '/demo').then(metas=>{
-    //     console.log(metas)
-    // })
+    getMetaFromDir(__dirname + '/demo',__dirname+'/demo/.aokignore').then(metas=>{
+        console.log(metas)
+        metas.forEach(m =>{
+            console.log(m.name + "  |  "+ m.srcPath)
+        })
+    })
 
     //resolveModule(require(__dirname + '/demo/index.js')) // {@get: , @put: , @post: , @delete: , hello: Object}
 }
@@ -209,14 +213,21 @@ const trimRepeatedMeta = metas=>{
     return finalMetas
 }
 
-const getMetaFromDir = dirPath =>{
+const getMetaFromDir = (dirPath,ignorePath )=>{
+    const gitignore  = (ignorePath && fs.existsSync(ignorePath)) ? gparser.compile(fs.readFileSync(ignorePath,'utf8')) : null
     return new Promise((r,j)=>{
         find.file(/(\.json)|(\.js)$/,dirPath,files=>{
             var metas =[]
             //console.log(dirPath)
             files.forEach(f=>{
                 // .   son   dir1/dir2
-               var rBasePath = utils.endTrim(utils.startTrim(utils.startTrim(f.replace(/[\\]/g,"/"),dirPath.replace(/[\\]/g,"/")) , "/"),[".json",".js"])
+                var rBasePath =utils.startTrim(utils.startTrim(f.replace(/[\\]/g,"/"),dirPath.replace(/[\\]/g,"/")) , "/")
+                // add ignore logic
+                if(gitignore && gitignore.denies(rBasePath)){
+                    debug(f," => ignored by " ,ignorePath)
+                    return
+                }
+                rBasePath = utils.endTrim(rBasePath,[".json",".js"])
                //get resource root name :  
                /*
                 demo\easy.json => easy
@@ -240,12 +251,12 @@ const getMetaFromDir = dirPath =>{
     })
     
 }
-exports.get=(srcPath)=>{
+exports.get=(srcPath,ignorePath)=>{
     return new Promise((r,j)=>{
         if(fs.statSync(srcPath).isFile()){
             r(getMetaFromFile(srcPath))
         }else
-            r(getMetaFromDir(srcPath))
+            r(getMetaFromDir(srcPath,ignorePath))
     })
 }
 

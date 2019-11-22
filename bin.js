@@ -9,8 +9,10 @@ program.version(require('./package.json').version)
     .option('-p --port [value]', '端口号，默认是11540')
     .option('-s --staticPath [value]', '静态路径' )
     .option('-l --list',"不启动，只查看可用资源")
+    .option('-i --ignore [value]','ignore文件路径, 默认是当前目录下的 .aokignore , aokignore使用完全与.gitignore一致')
     .option('--no-cors','关闭跨域')
     .option('--no-staticGoFirst','取消优先mount静态路径')
+    .option('-d --dirty',)
     .parse(process.argv)
 
 var rPath = '.'
@@ -26,6 +28,7 @@ if(fs.existsSync(rPath)){
     options.port = program.port || 11540
     options.nocors = !program.cors
     options.nostaticGoFirst = !program.staticGoFirst
+    options.ignore = path.resolve(process.cwd(),(program.ignore || '.aokignore'))
     var static = program.staticPath
     if(static){
         static = path.resolve(process.cwd(),static)
