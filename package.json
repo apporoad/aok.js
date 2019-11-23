@@ -36,9 +36,11 @@
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "koa2-cors": "^2.0.6",
+    "lisa.dl": "file:../lisa.dl.js",
     "lisa.json": "^1.0.0",
     "lisa.sync": "^1.0.0",
-    "lisa.utils": "git+https://github.com/apporoad/LiSA.utils.js.git"
+    "lisa.utils": "git+https://github.com/apporoad/LiSA.utils.js.git",
+    "rimraf": "^3.0.0"
   },
   "bin": {
     "aok": "bin.js"

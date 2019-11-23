@@ -176,12 +176,12 @@ const setRightResult =(ctx , data)=>{
   ctx.body=data
 }
 
-const registerRouter= (router,meta)=>{
+const registerRouter= (router,meta,dryRun)=>{
     var path = getPath(meta.name)
 
     //json 
     if(utils.endWith(meta.srcPath,'.json')){
-      var resouce = LiSASync(meta.srcPath)
+      var resouce =dryRun ? null : LiSASync(meta.srcPath)
        meta.methods.forEach(method=>{
         // todo here to do json.js first
           if(method.get){
@@ -321,6 +321,10 @@ const registerRouter= (router,meta)=>{
     }
 }
 
+exports.down=()=>{
+  app.off()
+}
+
 exports.up =(metas,options) =>{
     options =options || {}
     options.port = options.port || 11540
@@ -333,10 +337,11 @@ exports.up =(metas,options) =>{
     }
 
     metas.forEach(meta => {
-        registerRouter(router,meta)
+        registerRouter(router,meta,options.list)
     });
 
     if(!options.list){
+
       app.use(router.routes())
       .use(router.allowedMethods())
       app.listen(options.port)

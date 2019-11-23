@@ -47,6 +47,12 @@ aok [yourDir] -s [yourStaticDir] -p [yourport]
 
 ```
 
+### amazing using
+```bash
+https://github.com/apporoad/aok.js/blob/master/example/example.zip?raw=true
+
+```
+
 ### code
 ```bash
 npm i --save aok.js
