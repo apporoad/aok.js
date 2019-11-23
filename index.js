@@ -322,7 +322,8 @@ const registerRouter= (router,meta,dryRun)=>{
 }
 
 exports.down=()=>{
-  app.off()
+  //todo 
+  //app.off()
 }
 
 exports.up =(metas,options) =>{

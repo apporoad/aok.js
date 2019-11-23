@@ -19,7 +19,7 @@ program.version(require('./package.json').version)
     .option('-i --ignore [value]','ignore文件路径, 默认是工作目录下的 .aokignore , aokignore使用完全与.gitignore一致')
     .option('--no-cors','关闭跨域')
     .option('--no-staticGoFirst','取消优先mount静态路径')
-    .option('--no-dirty','只有path为zip文件或者git路径时有效，默认是纯净模式，执行完将删除临时文件')
+    .option('-d --dirty','只有path为zip文件或者git路径时有效，默认是纯净模式，执行完将删除临时文件')
     .option('-w --workspace [value]','只有path为zip文件或者git路径时有效, 默认为.aok文件夹，当workspace文件夹中存在内容时，不会再次解压或者下载资源')
     .parse(process.argv)
 
@@ -60,14 +60,14 @@ if(program.type =='zip' || program.type =='git' || uitls.endWith(rPath,'.zip') |
     if(fs.existsSync(ws)){
         console.log('workspace already created')
         run(ws,static)
-        cleanup.Cleanup(()=>{
-            //stop fist
-            aok.down()
-            console.log(ws )
-            rimraf(ws,error=>{
-                console.log('自动删除目录'+ ws+'失败，请手动删除:' + error)
-            })
-        })
+        // cleanup.Cleanup(()=>{
+        //     //stop fist
+        //     aok.down()
+        //     console.log(ws )
+        //     rimraf(ws,error=>{
+        //         console.log('自动删除目录'+ ws+'失败，请手动删除:' + error)
+        //     })
+        // })
     }
     else{
         //todo git zip 
@@ -77,11 +77,16 @@ if(program.type =='zip' || program.type =='git' || uitls.endWith(rPath,'.zip') |
         }
         cleanup.Cleanup(()=>{
             //stop fist
-            aok.down()
+            //aok.down()
+            console.log('生成临时文件目录为：' + ws)
+            //console.log(program.dirty)
+            if(!program.dirty){
+                console.log('auto delete : ' + ws)
+                rimraf(ws,error=>{
+                    console.log('自动删除目录'+ ws+'失败，请手动删除:' + error)
+                })
+            }
 
-            rimraf(ws,error=>{
-                console.log('自动删除目录'+ ws+'失败，请手动删除:' + error)
-            })
         })
         dl.getRepo(rPath,ws,type).then(()=>{
             run(ws,static)

@@ -49,7 +49,11 @@ aok [yourDir] -s [yourStaticDir] -p [yourport]
 
 ### amazing using
 ```bash
-https://github.com/apporoad/aok.js/blob/master/example/example.zip?raw=true
+aok https://github.com/apporoad/aok.js/blob/master/example/example.zip?raw=true --type zip
+
+# more in aok -h
+
+aok https://github.com/apporoad/pnote.git --type git -r api -s static -w pnote -d
 
 ```
 
