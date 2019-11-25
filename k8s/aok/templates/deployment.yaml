@@ -35,7 +35,7 @@ spec:
               protocol: TCP
           volumeMounts:
 {{- if .Values.persistence.enabled }}
-          - mountPath: /storage
+          - mountPath: /workspace
             name: storage-volume
 {{- end }}
           livenessProbe:

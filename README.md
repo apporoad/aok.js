@@ -163,3 +163,13 @@ kubectl apply -f https://raw.githubusercontent.com/apporoad/aok.js/master/k8s/ex
 
 [here](./howToMakeHelmChart.md)
 
+## helm
+
+
+```bash
+kubectl get storageClass
+
+helm install ./k8s/aok/ --dry-run --debug --set persistence.enabled=true,persistence.storageClass="xxxxxx",ingress.enabled=true
+
+```
+
