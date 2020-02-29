@@ -165,7 +165,10 @@ const setRightResult =(ctx , data)=>{
   // ctx.response.body=data;
   if(utils.Type.isObject(data)){
     ctx.type='json'
-  }else{
+  }else if(utils.Type.isArray(data)){
+    ctx.type = 'json'
+  }
+  else{
     if(utils.startWith(data,'<!DOCTYPE html>')){
       ctx.type='text/html'
     }
