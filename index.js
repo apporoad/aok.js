@@ -6,7 +6,6 @@ const utils = require('lisa.utils')
 const LiSASync = require('lisa.sync')
 const static = require('koa-static')
 const cors = require('koa2-cors')
-const deepassign= require('deepassign')
 const LiSAJson = require('lisa.json')
 
 const app = new koa()

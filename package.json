@@ -28,7 +28,6 @@
   "dependencies": {
     "commander": "^2.20.0",
     "debug": "^4.1.1",
-    "deepassign": "^1.0.2",
     "find": "^0.3.0",
     "gitignore-parser": "0.0.2",
     "koa": "^2.7.0",
