@@ -16,7 +16,6 @@ v2.0.0
 
 ```bash
 npm i -g aok.js
-npm i -g lisa.sync
 
 mkdir temp
 cd temp
