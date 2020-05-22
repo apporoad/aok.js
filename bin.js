@@ -5,8 +5,9 @@ const program = require('commander')
 const aok = require('./index')
 const uitls = require('lisa.utils')
 //const rimraf = require('rimraf')
-const dl = require('lisa.dl')
+//const dl = require('lisa.dl')
 const cleanup = require('./cleanup')
+const child_process = require('child_process')
 
 
 program.version(require('./package.json').version)
@@ -88,8 +89,19 @@ if(program.type =='zip' || program.type =='git' || uitls.endWith(rPath,'.zip') |
         //     }
 
         // })
-        dl.getRepo(rPath,ws,type).then(()=>{
-            run(ws,static)
+        // dl.getRepo(rPath,ws,type).then(()=>{
+        //     run(ws,static)
+        // })
+
+        child_process.exec(`ldl ${rPath} ${ws} --type ${type}` , (err,out,stdErr)=>{
+            //console.log(stdErr)
+            if(err){
+                console.log(`下载远程文件出错： ldl ${rPath} ${ws} --type ${type}`)
+                console.log("如果没有安装lisa.dl 请执行 npm i -g lisa.dl")
+            }else{
+                console.log(out)
+                run(ws,static)
+            }
         })
     }
 

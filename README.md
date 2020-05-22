@@ -53,6 +53,8 @@ aok [yourDir] -s [yourStaticDir] -p [yourport]
 
 ### amazing using
 ```bash
+npm i -g lisa.dl
+
 aok https://github.com/apporoad/aok.js/blob/master/example/example.zip?raw=true --type zip
 
 # more in aok -h
