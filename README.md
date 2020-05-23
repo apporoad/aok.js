@@ -38,6 +38,47 @@ aok .
 ## what is aok
 
 <div align=center><img src="https://raw.githubusercontent.com/apporoad/aok.js/master/docs/aok.js.png"/></div>  
+参数说明：
+
+1. 暴露出去的资源方法，同时支持同步及异步方法
+
+   ```js
+   {
+       "@get" : (params , ctx , options) =>{
+           // return {}
+           // return []
+           return Promise.resolve(1)
+       },
+       "@post" : async (params , ctx , options) =>{
+           // return {}
+           // return []
+           return Promise.resolve(1)
+       }
+   }
+   ```
+
+   
+
+2. 也支持其他形式
+
+   ```js
+   {
+       "@delete" :  'test delete success',
+       "@put" : {
+           hello : 'good good day'
+       }
+   }
+   ```
+
+3. 方法参数说明
+
+   params ： get时 ctx.query  其他methods 时 取 ctx.request.body
+
+   ctx ： 请求上下文
+
+   options : 程序启动的options，应用直接获取做一些特殊处理
+
+   options.server : 即koa的server， options.server.close() 关闭应用
 
 ## use
 
@@ -116,66 +157,5 @@ just try it
 
 ```
 
-
-## docker run 
-
-```bash
-
-#  first add /api and /static
-docker run -d --name aok -p 1154:1154 -v /api:/api -v /static:/static apporoad/aok:1
-
-```
-
-
-
-## dockerfile
-```bash
-
-git clone https://github.com/apporoad/aok.js.git
-
-cd aok.js
-
-npm i
-
-docker build -t apporoad/aok:1 .
-
-docker run -d --name aok -p 1154:1154 apporoad/aok:1 
-
-docker run -d --name aok2 -e aok_type=git -e aok_path="https://github.com/apporoad/pnote.git" -e aok_param="-r api -s static" -p 1154:1154 apporoad/aok:2 
-
-
-docker run -d --name aok3 -e aok_type=zip -e aok_path="https://github.com/apporoad/pnote/blob/master/pnote.zip?raw=true" -e aok_param="-r api -s static" -p 1154:1154 apporoad/aok:2 
-
-## just for test
-
-docker run -d --name aoktest  -p 11540:1154 -v /home/rue/wp/aok.js:/aok apporoad/aok:2
-
-
-#visit  http://localhost:1154
-#visit  http://localhost:1154/data
-```
-
-## k8s
-
-easy use here:
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/apporoad/aok.js/master/k8s/example/aok.yaml
-kubectl apply -f https://raw.githubusercontent.com/apporoad/aok.js/master/k8s/example/ingress-aok.yaml
-
-```
-
-## howToMakeHelmChart
-
-[here](./howToMakeHelmChart.md)
-
-## helm
-
-
-```bash
-kubectl get storageClass
-
-helm install ./k8s/aok/ --dry-run --debug --set persistence.enabled=true,persistence.storageClass="xxxxxx",ingress.enabled=true
-
-```
-
+## docker
+[jump](./docs/docker.md)
