@@ -78,8 +78,6 @@ aok .
 
    options : 程序启动的options，应用直接获取做一些特殊处理
 
-   options.server : 即koa的server， options.server.close() 关闭应用
-
 ## use
 
 ### cli

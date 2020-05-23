@@ -7,7 +7,6 @@ const LiSASync = require('lisa.sync')
 const static = require('koa-static')
 const cors = require('koa2-cors')
 const LiSAJson = require('lisa.json')
-const stoppable = require('stoppable')
 
 const app = new koa()
 app.use(bodyParser())
@@ -314,13 +313,10 @@ exports.up = (metas, options) => {
     app.use(router.routes())
       .use(router.allowedMethods())
     // 添加 server
-    var server = app.listen(options.port)
-    //const httpTerminator = terminate.createHttpTerminator({ server  ,})
-    stoppable(server)
-    options.stopServer = () =>{ server.close() }
-    app.on('close', err => {
-      console.error('server errosdddddddddddddddddr', err)
-    });
+    app.listen(options.port)
+    // app.on('close', err => {
+    //   console.error('server errosdddddddddddddddddr', err)
+    // });
     console.info(`web started : http://localhost:${options.port}/`)
   }
 

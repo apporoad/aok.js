@@ -3,7 +3,6 @@
 
 module.exports={
     "@get" : async (params,ctx,options)=>{
-        options.stopServer()
         return await new Promise((r,j)=>{
             setTimeout(() => {
                 r("here GET /")
