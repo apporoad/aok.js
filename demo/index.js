@@ -9,10 +9,14 @@ module.exports={
             }, 500);
         })
     },
-    "@put" : function(params){
+    "@put" : function(params,ctx){
         return {success : true, msg : "add succed"}
     },
-    "@post" : function(params){
+    "@post" : function(params,ctx){
+        if(ctx.request.files){
+            
+            // console.log('files count : '  + ctx.request.files.length)
+        }
         return {success : true, msg : "edit right"}
     },
     "@delete" : function(params){

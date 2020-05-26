@@ -7,6 +7,7 @@ const LiSASync = require('lisa.sync')
 const static = require('koa-static')
 const cors = require('koa2-cors')
 const LiSAJson = require('lisa.json')
+const koaBody = require('koa-body')
 
 const app = new koa()
 app.use(bodyParser())
@@ -298,6 +299,13 @@ exports.up = (metas, options) => {
   options.port = options.port || 11540
   options.nocors = options.nocors || false
   port = options.port
+
+  app.use(koaBody({
+    multipart: true,
+    formidable: {
+        maxFileSize:  options.maxFileSize ||  52428800  
+    }
+}))
 
   //cors
   if (!options.nocors) {

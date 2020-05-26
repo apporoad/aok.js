@@ -78,6 +78,10 @@ aok .
 
    options : 程序启动的options，应用直接获取做一些特殊处理
 
+4. 文件上传支持
+
+    采用koa-body方式上传文件，ctx.request.files直接获取
+
 ## use
 
 ### cli
