@@ -1,6 +1,6 @@
 {
   "name": "aok.js",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "revert the koa",
   "main": "index.js",
   "scripts": {

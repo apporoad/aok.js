@@ -257,7 +257,7 @@ const registerRouter = (router, meta, dryRun, options) => {
         var fn = method.get != '@value' ? meta.value[method.get] : meta.value
         router.get(path, async (ctx, next) => {
           //ctx.body = "hello"
-          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(ctx.query, ctx, options) : fn)
+          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({},ctx.request.body||{}, ctx.query) , ctx, options) : fn)
           setRightResult(ctx, data)
         })
       } else if (method.put) {
@@ -265,7 +265,7 @@ const registerRouter = (router, meta, dryRun, options) => {
         console.info(`PUT : http://localhost:${port}${path}`)
         var fn = meta.value[method.put]
         router.put(path, async (ctx, next) => {
-          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(ctx.request.body, ctx, options) : fn)
+          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query,ctx.request.body), ctx, options) : fn)
           setRightResult(ctx, data)
         })
       } else if (method.post) {
@@ -273,7 +273,7 @@ const registerRouter = (router, meta, dryRun, options) => {
         console.info(`POST : http://localhost:${port}${path}`)
         var fn = meta.value[method.post]
         router.post(path, async (ctx, next) => {
-          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(ctx.request.body, ctx, options) : fn)
+          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query,ctx.request.body), ctx, options) : fn)
           setRightResult(ctx, data)
         })
       } else if (method.delete) {
@@ -281,7 +281,7 @@ const registerRouter = (router, meta, dryRun, options) => {
         console.info(`DELETE : http://localhost:${port}${path}`)
         var fn = meta.value[method.delete]
         router.delete(path, async (ctx, next) => {
-          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(ctx.request.body, ctx, options) : fn)
+          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query,ctx.request.body), ctx, options) : fn)
           setRightResult(ctx, data)
         })
       }
