@@ -338,6 +338,8 @@ exports.getMetas = (resourcePath) => {
 
 exports.mount = (resourcePath, staticPath, options) => {
   options = options || {}
+  options.resourcePath = resourcePath
+  options.staticPath = staticPath
   options.port = options.port || 11540
   options.nocors = options.nocors || false
   options.nostaticGoFirst = options.nostaticGoFirst || false
