@@ -161,3 +161,15 @@ just try it
 
 ## docker
 [jump](./docs/docker.md)
+
+
+## how to debug
+推荐做法是直接采用本地引用，直接调用方式  
+一些情况必须启动aok，vscode 采用如下配置方式：  
+```json
+{
+    "program": "/usr/local/bin/aok",
+    "args": ["${workspaceFolder}/api" , "-p" ,"10000"]
+}
+
+```
