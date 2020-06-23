@@ -298,8 +298,8 @@ const registerRouter = (router, meta, dryRun, options, exts) => {
     if (ext.get) {
       addHelp(port, path, 'GET')
       console.info(`GET : http://localhost:${port}${path}`)
-      var fn = ext.get
       router.get(path, async (ctx, next) => {
+        var fn = ext.get
         var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.request.body || {}, ctx.query), ctx, options,meta) : fn)
         setRightResult(ctx, data)
       })
@@ -307,8 +307,8 @@ const registerRouter = (router, meta, dryRun, options, exts) => {
     if (ext.put) {
       addHelp(port, path, 'PUT')
       console.info(`PUT : http://localhost:${port}${path}`)
-      var fn = ext.put
       router.put(path, async (ctx, next) => {
+        var fn = ext.put
         var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query, ctx.request.body), ctx, options,meta) : fn)
         setRightResult(ctx, data)
       })
@@ -316,8 +316,8 @@ const registerRouter = (router, meta, dryRun, options, exts) => {
     if (ext.post) {
       addHelp(port, path, 'POST')
       console.info(`POST : http://localhost:${port}${path}`)
-      var fn = ext.post
       router.post(path, async (ctx, next) => {
+        var fn = ext.post
         var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query, ctx.request.body), ctx, options,meta) : fn)
         setRightResult(ctx, data)
       })
@@ -325,8 +325,8 @@ const registerRouter = (router, meta, dryRun, options, exts) => {
     if (ext.delete) {
       addHelp(port, path, 'DELETE')
       console.info(`DELETE : http://localhost:${port}${path}`)
-      var fn = ext.delete
       router.delete(path, async (ctx, next) => {
+        var fn = ext.delete
         var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query, ctx.request.body), ctx, options,meta) : fn)
         setRightResult(ctx, data)
       })

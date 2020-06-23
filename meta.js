@@ -307,7 +307,7 @@ exports.get = (srcPath, ignorePath,exts) => {
 }
 
 exports.loadExts = async (path)=>{
-    var files = searchFile(/\.aok/,path)
+    var files = await searchFile(/\.aok$/,path)
     var exts  = []
     for(var i =0 ;i<files.length;i++){
         var f = files[i]
@@ -317,6 +317,7 @@ exports.loadExts = async (path)=>{
             debug("load ext error:" + f)
         }
     }
+    return exts
 }
 
 
