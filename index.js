@@ -257,7 +257,7 @@ const registerRouter = (router, meta, dryRun, options) => {
         var fn = method.get != '@value' ? meta.value[method.get] : meta.value
         router.get(path, async (ctx, next) => {
           //ctx.body = "hello"
-          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({},ctx.request.body||{}, ctx.query) , ctx, options) : fn)
+          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.request.body || {}, ctx.query), ctx, options) : fn)
           setRightResult(ctx, data)
         })
       } else if (method.put) {
@@ -265,7 +265,7 @@ const registerRouter = (router, meta, dryRun, options) => {
         console.info(`PUT : http://localhost:${port}${path}`)
         var fn = meta.value[method.put]
         router.put(path, async (ctx, next) => {
-          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query,ctx.request.body), ctx, options) : fn)
+          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query, ctx.request.body), ctx, options) : fn)
           setRightResult(ctx, data)
         })
       } else if (method.post) {
@@ -273,7 +273,7 @@ const registerRouter = (router, meta, dryRun, options) => {
         console.info(`POST : http://localhost:${port}${path}`)
         var fn = meta.value[method.post]
         router.post(path, async (ctx, next) => {
-          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query,ctx.request.body), ctx, options) : fn)
+          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query, ctx.request.body), ctx, options) : fn)
           setRightResult(ctx, data)
         })
       } else if (method.delete) {
@@ -281,7 +281,7 @@ const registerRouter = (router, meta, dryRun, options) => {
         console.info(`DELETE : http://localhost:${port}${path}`)
         var fn = meta.value[method.delete]
         router.delete(path, async (ctx, next) => {
-          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query,ctx.request.body), ctx, options) : fn)
+          var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query, ctx.request.body), ctx, options) : fn)
           setRightResult(ctx, data)
         })
       }
@@ -303,9 +303,9 @@ exports.up = (metas, options) => {
   app.use(koaBody({
     multipart: true,
     formidable: {
-        maxFileSize:  options.maxFileSize ||  52428800  
+      maxFileSize: options.maxFileSize || 52428800
     }
-}))
+  }))
 
   //cors
   if (!options.nocors) {
@@ -336,7 +336,8 @@ exports.getMetas = (resourcePath) => {
   })
 }
 
-exports.mount = (resourcePath, staticPath, options) => {
+
+var mount = async (resourcePath, staticPath, options) => {
   options = options || {}
   options.resourcePath = resourcePath
   options.staticPath = staticPath
@@ -346,52 +347,55 @@ exports.mount = (resourcePath, staticPath, options) => {
   options.metas = options.metas || []
   port = options.port
 
-  metaMan.get(resourcePath, options.ignore).then(metas => {
-    metas = metas.concat(options.metas)
-    //order 
-    metas.sort((a, b) => {
-      /*{ type: 'code',
+  //这里加载扩展
+  var metas = await metaMan.get(resourcePath, options.ignore)
+  metas = metas.concat(options.metas)
+  //order 
+  metas.sort((a, b) => {
+    /*{ type: 'code',
     name: 'api._any_',
     methods: [ [Object] ],
     value: { '@get': [AsyncFunction: @get] },
     srcPath: 'F:\\workspace\\pnote\\api\\_any_.js' }*/
-      a = a.name
-      b = b.name
-      var aIndex = a.indexOf('_any_')
-      var bIndex = b.indexOf('_any_')
-      if (aIndex > -1 && bIndex > -1) {
-        return aIndex < bIndex
-      } else if (aIndex > -1) {
-        return 1
-      } else if (bIndex > -1) {
-        return -1
-      } else {
-        return a < b
-      }
-    })
-
-    //console.log(metas)
-    if (!options.nostaticGoFirst) {
-      if (!options.list) {
-        if (staticPath) {
-          console.log('mount static dir: ' + staticPath)
-          app.use(static(staticPath))
-        }
-      }
+    a = a.name
+    b = b.name
+    var aIndex = a.indexOf('_any_')
+    var bIndex = b.indexOf('_any_')
+    if (aIndex > -1 && bIndex > -1) {
+      return aIndex < bIndex
+    } else if (aIndex > -1) {
+      return 1
+    } else if (bIndex > -1) {
+      return -1
+    } else {
+      return a < b
     }
-    exports.up(metas, options)
-    if (options.nostaticGoFirst) {
-      if (!options.list) {
-        if (staticPath) {
-          console.log('mount static dir: ' + staticPath)
-          app.use(static(staticPath))
-        }
-      }
-    }
-
   })
 
+  //console.log(metas)
+  if (!options.nostaticGoFirst) {
+    if (!options.list) {
+      if (staticPath) {
+        console.log('mount static dir: ' + staticPath)
+        app.use(static(staticPath))
+      }
+    }
+  }
+  exports.up(metas, options)
+  if (options.nostaticGoFirst) {
+    if (!options.list) {
+      if (staticPath) {
+        console.log('mount static dir: ' + staticPath)
+        app.use(static(staticPath))
+      }
+    }
+  }
+
+
+
 }
+
+exports.mount = mount
 
 exports.list = (resourcePath, staticPath, options) => {
   options = options || {}
