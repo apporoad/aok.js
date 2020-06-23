@@ -306,6 +306,19 @@ exports.get = (srcPath, ignorePath,exts) => {
     })
 }
 
+exports.loadExts = async (path)=>{
+    var files = searchFile(/\.aok/,path)
+    var exts  = []
+    for(var i =0 ;i<files.length;i++){
+        var f = files[i]
+        try{
+            exts.push(require(f))
+        }catch(e){
+            debug("load ext error:" + f)
+        }
+    }
+}
+
 
 
 

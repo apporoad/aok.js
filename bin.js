@@ -17,6 +17,7 @@ program.version(require('./package.json').version)
     .option('-p --port [value]', '端口号，默认是11540')
     .option('-s --staticPath [value]', '静态路径，当path为zip文件或者git路径时，静态路径的相对路径是针对于工作目录而言的' )
     .option('-l --list',"不启动，只查看可用资源")
+    .option('-x --ext' , "是否加载扩展，默认不加载")
     .option('-i --ignore [value]','ignore文件路径, 默认是工作目录下的 .aokignore , aokignore使用完全与.gitignore一致')
     .option('--no-cors','关闭跨域')
     .option('--no-staticGoFirst','取消优先mount静态路径')
@@ -36,6 +37,7 @@ var run =(rp,static)=>{
     var options = {}
     options.port = program.port || 11540
     options.nocors = !program.cors
+    options.ext = program.ext || false
     options.nostaticGoFirst = !program.staticGoFirst
     options.ignore = path.resolve(rp,(program.ignore || '.aokignore'))
 

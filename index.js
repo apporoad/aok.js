@@ -177,7 +177,7 @@ const setRightResult = (ctx, data) => {
   ctx.body = data
 }
 
-const registerRouter = (router, meta, dryRun, options) => {
+const registerRouter = (router, meta, dryRun, options, exts) => {
   var path = getPath(meta.name)
 
   //json 
@@ -245,11 +245,10 @@ const registerRouter = (router, meta, dryRun, options) => {
         })
       }
     })
-  } else {
+  } else if (utils.endWith(meta.srcPath, '.js')) {
     //here is  code 
     //{"get":"@get"},{"put","@put"},{"post":"@post"},{"delete":"@del"}
     meta.methods.forEach(method => {
-      //todo get
       if (method.get) {
         addHelp(port, path, 'GET')
         console.info(`GET : http://localhost:${port}${path}`)
@@ -286,6 +285,53 @@ const registerRouter = (router, meta, dryRun, options) => {
         })
       }
     })
+    //此处逻辑为扩展的逻辑
+  } else if (exts && exts.length && exts.length > 0) {
+    //先找到哪个扩展
+    var arry = utils.ArrayFilter(exts, null, (one, two) => {
+      return utils.endWith(meta.srcPath, two.ext)
+    })
+    if (arry.length == 0) {
+      return
+    }
+    var ext = arry[0]
+    if (ext.get) {
+      addHelp(port, path, 'GET')
+      console.info(`GET : http://localhost:${port}${path}`)
+      var fn = ext.get
+      router.get(path, async (ctx, next) => {
+        var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.request.body || {}, ctx.query), ctx, options) : fn)
+        setRightResult(ctx, data)
+      })
+    }
+    if (ext.put) {
+      addHelp(port, path, 'PUT')
+      console.info(`PUT : http://localhost:${port}${path}`)
+      var fn = ext.put
+      router.put(path, async (ctx, next) => {
+        var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query, ctx.request.body), ctx, options) : fn)
+        setRightResult(ctx, data)
+      })
+    }
+    if (ext.post) {
+      addHelp(port, path, 'POST')
+      console.info(`POST : http://localhost:${port}${path}`)
+      var fn = ext.post
+      router.post(path, async (ctx, next) => {
+        var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query, ctx.request.body), ctx, options) : fn)
+        setRightResult(ctx, data)
+      })
+    }
+    if (ext.delete) {
+      addHelp(port, path, 'DELETE')
+      console.info(`DELETE : http://localhost:${port}${path}`)
+      var fn = ext.delete
+      router.delete(path, async (ctx, next) => {
+        var data = await Promise.resolve((utils.Type.isAsyncFunction(fn) || utils.Type.isFunction(fn)) ? fn(Object.assign({}, ctx.query, ctx.request.body), ctx, options) : fn)
+        setRightResult(ctx, data)
+      })
+
+    }
   }
 }
 
@@ -294,7 +340,7 @@ exports.down = () => {
   //app.off()
 }
 
-exports.up = (metas, options) => {
+exports.up = (metas, options, exts) => {
   options = options || {}
   options.port = options.port || 11540
   options.nocors = options.nocors || false
@@ -313,7 +359,7 @@ exports.up = (metas, options) => {
   }
 
   metas.forEach(meta => {
-    registerRouter(router, meta, options.list, options)
+    registerRouter(router, meta, options.list, options, exts)
   });
 
   if (!options.list) {
@@ -330,9 +376,9 @@ exports.up = (metas, options) => {
 
 }
 
-exports.getMetas = (resourcePath) => {
+exports.getMetas = (resourcePath, exts) => {
   return new Promise((r, j) => {
-    r(metaMan.get(resourcePath))
+    r(metaMan.get(resourcePath, null, exts))
   })
 }
 
@@ -345,10 +391,15 @@ var mount = async (resourcePath, staticPath, options) => {
   options.nocors = options.nocors || false
   options.nostaticGoFirst = options.nostaticGoFirst || false
   options.metas = options.metas || []
+  options.ext = options.ext || false
   port = options.port
 
   //这里加载扩展
-  var metas = await metaMan.get(resourcePath, options.ignore)
+  var exts = null
+  if (options.ext) {
+    exts = await metaMan.loadExts(resourcePath)
+  }
+  var metas = await metaMan.get(resourcePath, options.ignore, exts)
   metas = metas.concat(options.metas)
   //order 
   metas.sort((a, b) => {
@@ -381,7 +432,7 @@ var mount = async (resourcePath, staticPath, options) => {
       }
     }
   }
-  exports.up(metas, options)
+  exports.up(metas, options, exts)
   if (options.nostaticGoFirst) {
     if (!options.list) {
       if (staticPath) {
