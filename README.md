@@ -175,3 +175,10 @@ just try it
 }
 
 ```
+
+## examples
+1. [pnote](https://github.com/apporoad/pnote)
+2. [apinfo](https://github.com/apporoad/apinfo.js)
+3. [dmodule](https://github.com/apporoad/dmodule.js)
+4. [danmu.js](https://github.com/apporoad/LiSA.danmu.js)
+5. adding
