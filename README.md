@@ -10,7 +10,8 @@ reverse the koa , ROP resource oriented program
 v2.0.0 
 1. add .aokignore just like .gitignore
 2. 默认忽略扫描node_modules/的文件
-3. ext 扩展功能，详见 [ext](./docs/ext.md)
+3. ext 扩展功能，详见 [ext](./docs/ext.md) 参考下面的csv.aok
+4. 支持csv扩展 [csv.aok](https://github.com/apporoad/csv.aok)
 
 
 ## just step by step to understand aok
