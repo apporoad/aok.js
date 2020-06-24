@@ -1,6 +1,6 @@
 const koa = require("koa")
 const Router = require("koa-router")
-const bodyParser = require('koa-bodyparser')
+//const bodyParser = require('koa-bodyparser')
 const metaMan = require('./meta')
 const utils = require('lisa.utils')
 const LiSASync = require('lisa.sync')
@@ -10,7 +10,7 @@ const LiSAJson = require('lisa.json')
 const koaBody = require('koa-body')
 
 const app = new koa()
-app.use(bodyParser())
+//app.use(bodyParser())
 const router = new Router()
 
 var help = ""
