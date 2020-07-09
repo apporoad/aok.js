@@ -1,5 +1,5 @@
 # aok.js
-reverse the koa , ROP resource oriented program
+reverse the koa , ROP resource oriented program, another implement like json-server and more than it
 
 ## phil(哲学)
 
