@@ -428,7 +428,8 @@ var mount = async (resourcePath, staticPath, options) => {
     if (!options.list) {
       if (staticPath) {
         console.log('mount static dir: ' + staticPath)
-        app.use(static(staticPath))
+        // app.use(static(staticPath))
+        mountStaticPath(staticPath)
       }
     }
   }
@@ -437,13 +438,17 @@ var mount = async (resourcePath, staticPath, options) => {
     if (!options.list) {
       if (staticPath) {
         console.log('mount static dir: ' + staticPath)
-        app.use(static(staticPath))
+        // app.use(static(staticPath))
+        mountStaticPath(staticPath)
       }
     }
   }
+}
 
-
-
+function mountStaticPath(statics){
+    statics.split(',').forEach(root=>{
+      app.use(static(root))
+    })
 }
 
 exports.mount = mount

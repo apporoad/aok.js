@@ -58,7 +58,7 @@ if(program.type =='zip' || program.type =='git' || uitls.endWith(rPath,'.zip') |
     //相对静态路径
     var static = program.staticPath
     if(static){
-        static = path.resolve(ws,static)
+        static = resolveStaticPath(ws,static)// path.resolve(ws,static)
     }
     if(fs.existsSync(ws)){
         console.log('workspace already created')
@@ -114,7 +114,7 @@ if(program.type =='zip' || program.type =='git' || uitls.endWith(rPath,'.zip') |
     if(fs.existsSync(rPath)){
         var static = program.staticPath
         if(static){
-            static = path.resolve(process.cwd(),static)
+            static = resolveStaticPath(process.cwd(), static)// path.resolve(process.cwd(),static)
         }
         run(rPath,static)
     }else{
@@ -122,4 +122,10 @@ if(program.type =='zip' || program.type =='git' || uitls.endWith(rPath,'.zip') |
     }
 }
 
-
+function resolveStaticPath(workplace , statics){
+    var realPaths = []
+    statics.split(',').forEach(element => {
+        realPaths.push(path.resolve(workplace,element))
+    });
+    return realPaths.join(',')
+}
