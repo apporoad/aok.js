@@ -18,3 +18,9 @@ exports.post =(params , ctx , options , meta) => {}
 exports.delete =(params , ctx , options , meta) => {}
 
 ```
+
+### run it
+```bash
+
+aok . -x
+```

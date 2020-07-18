@@ -5,15 +5,13 @@ reverse the koa , ROP resource oriented program, another implement like json-ser
 
 [phil](./phil.md)
 
-## about version 
-
-v2.0.0 
-1. add .aokignore just like .gitignore
-2. 默认忽略扫描node_modules/的文件
-3. ext 扩展功能，详见 [ext](./docs/ext.md) 参考下面的csv.aok
-4. 支持csv扩展 [csv.aok](https://github.com/apporoad/csv.aok)
-5. 支持静态文件目录挂载， -s  --static  , 多个目录以 , 分隔
-
+## what can we do with aok.js
+1. build your http api with your js file in seconds
+2. build your static website with few backend apis : [pnote](https://github.com/apporoad/pnote)
+3. share your excel data to any other systems : [csv.aok](https://github.com/apporoad/csv.aok)
+4. build your own program just with few files just like all aok projects
+5. extends aok just for your needs : [how to extend](docs/ext.md)
+6. add a file upload server in seconds : [how](https://github.com/apporoad/dmodule.js/blob/05fa91578d23a8ee6bc128f153aa933f32358514/api/meta.js#L65)
 
 ## just step by step to understand aok
 
